@@ -1,0 +1,13 @@
+execution:
+- concurrency: 100
+  ramp-up: 10s
+  hold-for: 30s
+  scenario: db-test
+  criteria:
+    - fail>5%
+
+scenarios:
+  db-test:
+    requests:
+    - url: http://localhost:8080/db
+      timeout: 5s 
