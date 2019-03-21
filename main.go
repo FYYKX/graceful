@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"os/signal"
@@ -18,7 +19,7 @@ import (
 func main() {
 	log.Println("Starting...")
 
-	connStr := "postgres://postgres:postgres@localhost/postgres?sslmode=disable"
+	connStr := "postgres://postgres:M5AGRmaMUh@terrifying-salamander-postgresql/postgres?sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
@@ -43,6 +44,22 @@ func main() {
 	})
 	r.Get("/hello", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "hello")
+	})
+	r.Get("/hpa", func(w http.ResponseWriter, r *http.Request) {
+		var x, i float64
+		for i = 0; i <= 1000000; i++ {
+			x += math.Sqrt(i)
+		}
+		fmt.Fprintf(w, "%f", x)
+	})
+	r.Get("/add", func(w http.ResponseWriter, r *http.Request) {
+		var userid int
+		err := db.QueryRow(`INSERT INTO person(name) VALUES('beatrice') RETURNING id`).Scan(&userid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		fmt.Fprintln(w, userid)
 	})
 	r.Get("/db", func(w http.ResponseWriter, r *http.Request) {
 		_, err := db.QueryContext(r.Context(), "SELECT name FROM person")

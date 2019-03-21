@@ -13,20 +13,15 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: kangxi/graceful:2
+        image: kangxi/graceful:4
         resources:
           limits:
             memory: "16Mi"
-            cpu: "100m"
+            cpu: "10m"
         ports:
         - containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /live
-            port: 8080
-          initialDelaySeconds: 5
         readinessProbe:
           httpGet:
-            path: /ready
+            path: /hello
             port: 8080
           

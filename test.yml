@@ -1,13 +1,14 @@
 execution:
 - concurrency: 100
-  ramp-up: 10s
-  hold-for: 30s
+  ramp-up: 20s
+  hold-for: 2m
   scenario: db-test
   criteria:
-    - fail>5%
+    - fail>2%
 
 scenarios:
   db-test:
     requests:
+    - url: http://localhost:8080/add
     - url: http://localhost:8080/db
-      timeout: 5s 
+    - url: http://localhost:8080/hpa
